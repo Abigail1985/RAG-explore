@@ -155,10 +155,10 @@ def initialize_model_and_tokenizer():
         global_tokenizer = AutoTokenizer.from_pretrained(MODEL, token=HF_TOKEN)
         global_model = AutoModelForCausalLM.from_pretrained(
             MODEL,
-            device_map="auto",
+            device_map="cpu",
             trust_remote_code=True,
             token=HF_TOKEN,
-            torch_dtype=torch.float16
+            torch_dtype=torch.float32
         )
         logger.info("Model and tokenizer initialized successfully")
 
