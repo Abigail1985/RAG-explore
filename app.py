@@ -27,7 +27,6 @@ from transformers import (
     StoppingCriteriaList,
 )
 from transformers import logging as hf_logging
-import spaces
 from llama_index.core import (
     StorageContext,
     VectorStoreIndex,
@@ -195,7 +194,6 @@ def extract_text_from_document(file):
     else:
         return None, 0, ValueError(f"Unsupported file format: {file_extension}")
 
-@spaces.GPU()
 def create_or_update_index(files, request: gr.Request = None):
     global global_file_info
     
@@ -309,7 +307,6 @@ def create_or_update_index(files, request: gr.Request = None):
     output_container += "</div>"
     return f"Successfully indexed {len(files)} files.", output_container
 
-@spaces.GPU()
 def stream_chat(
     message: str,
     history: list,
