@@ -196,14 +196,14 @@ def extract_text_from_document(file):
         return None, 0, ValueError(f"Unsupported file format: {file_extension}")
 
 @spaces.GPU()
-def create_or_update_index(files, request=None):
+def create_or_update_index(files, request: gr.Request = None):
     global global_file_info
     
     if not files:
         return "Please provide files.", ""
     
     start_time = time.time()
-    user_id = getattr(request, "session_hash", "default")
+    user_id = request.session_hash if request else "default"
     save_dir = f"./{user_id}_index"
     # Initialize LlamaIndex modules
     llm = get_llm()
@@ -321,12 +321,12 @@ def stream_chat(
     penalty: float,
     retriever_k: int,
     merge_threshold: float,
-    request=None
+    request: gr.Request = None
 ):
     if not request:
         yield history + [{"role": "assistant", "content": "Session initialization failed. Please refresh the page."}]
         return
-    user_id = getattr(request, "session_hash", "default")
+    user_id = request.session_hash if request else "default"
     index_dir = f"./{user_id}_index"
     if not os.path.exists(index_dir):
         yield history + [{"role": "assistant", "content": "Please upload documents first."}]
@@ -580,4 +580,4 @@ def create_demo():
 if __name__ == "__main__":
     initialize_model_and_tokenizer()
     demo = create_demo()
-    demo.launch(show_api=False)
+    demo.launch(show_api=False, ssr_mode=False)
